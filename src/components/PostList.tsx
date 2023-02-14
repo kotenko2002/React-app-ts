@@ -1,9 +1,9 @@
-import { IPost } from "../types/types";
+import { Post } from "../entities/types";
 import PostItem from "./PostItem";
 
 interface PostListProps {
   title: string;
-  posts: IPost[];
+  posts: Post[];
 }
 
 const PostList = ({ title, posts }: PostListProps) => {

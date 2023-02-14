@@ -1,7 +1,8 @@
-import { IPost } from "../types/types";
+import { Post } from "../entities/types";
+import Button from "./UI/button/Button";
 
 interface PostItemProps {
-  post: IPost;
+  post: Post;
 }
 
 const PostItem = ({ post }: PostItemProps) => {
@@ -15,7 +16,7 @@ const PostItem = ({ post }: PostItemProps) => {
           <div className="post__content">{post.body}</div>
         </div>
         <div className="post__btn">
-          <button>Delete</button>
+          <Button>Delete</Button>
         </div>
       </div>
     </div>

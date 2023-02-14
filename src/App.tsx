@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import PostList from "./components/PostList";
 import "./styles/App.css";
-import { IPost } from "./types/types";
+import { Post } from "./entities/types";
+import Button from "./components/UI/button/Button";
+import Input from "./components/UI/input/Input";
 
 function App() {
-  const [posts, setPosts] = useState<IPost[]>([
+  const [posts, setPosts] = useState<Post[]>([
     {
       id: 1,
       title: "JS",
@@ -22,12 +24,18 @@ function App() {
     },
   ]);
 
+  const addPost = () => {
+    console.log(777);
+  };
+
   return (
     <div className="App">
       <form action="">
-        <input type="text" placeholder="Title name" />
-        <input type="text" placeholder="Body description" />
-        <button>Create</button>
+        <Input type="text" placeholder="Title name" />
+        <Input type="text" placeholder="Body description" />
+        <Button disabled onClick={addPost}>
+          Create
+        </Button>
       </form>
       <PostList title="list #1" posts={posts} />
     </div>
