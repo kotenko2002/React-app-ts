@@ -19,6 +19,7 @@ const PostItem = ({ post, postNumber, remove }: PostItemProps) => {
         </div>
         <div className="post__btn">
           <Button
+            style={{ marginLeft: "10px" }}
             onClick={() => {
               remove(post);
             }}

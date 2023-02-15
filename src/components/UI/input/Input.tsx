@@ -1,4 +1,3 @@
-import React from "react";
 import { DetailedHTMLProps, InputHTMLAttributes } from "react";
 import classes from "./Input.module.css";
 
