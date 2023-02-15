@@ -1,9 +1,12 @@
+import React from "react";
+import { DetailedHTMLProps, InputHTMLAttributes } from "react";
 import classes from "./Input.module.css";
 
-interface InputProps {
-  type?: "text" | "number";
-  placeholder?: string;
-}
+interface InputProps
+  extends DetailedHTMLProps<
+    InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  > {}
 
 const Input = (props: InputProps) => {
   return <input {...props} className={classes.Input} />;

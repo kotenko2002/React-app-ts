@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PostList from "./components/PostList";
 import "./styles/App.css";
 import { Post } from "./entities/types";
-import Button from "./components/UI/button/Button";
-import Input from "./components/UI/input/Input";
+import PostForm from "./components/PostForm";
 
 function App() {
   const [posts, setPosts] = useState<Post[]>([
@@ -24,20 +23,22 @@ function App() {
     },
   ]);
 
-  const addPost = () => {
-    console.log(777);
+  const createPost = (newPost: Post) => {
+    setPosts([...posts, newPost]);
+  };
+
+  const removePost = (post: Post) => {
+    setPosts(posts.filter((p) => p.id !== post.id));
   };
 
   return (
     <div className="App">
-      <form action="">
-        <Input type="text" placeholder="Title name" />
-        <Input type="text" placeholder="Body description" />
-        <Button disabled onClick={addPost}>
-          Create
-        </Button>
-      </form>
-      <PostList title="list #1" posts={posts} />
+      <PostForm create={createPost} />
+      {posts.length !== 0 ? (
+        <PostList remove={removePost} title="List of posts" posts={posts} />
+      ) : (
+        <h1 style={{ textAlign: "center" }}>No posts</h1>
+      )}
     </div>
   );
 }
