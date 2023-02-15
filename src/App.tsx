@@ -5,6 +5,8 @@ import { Post } from "./models/Post";
 import PostForm from "./components/PostForm";
 import PostFilter from "./components/PostFilter";
 import { SortOption } from "./types/types";
+import Modal from "./components/UI/modal/Modal";
+import Button from "./components/UI/button/Button";
 
 interface Filter {
   sort: SortOption;
@@ -30,6 +32,7 @@ function App() {
     },
   ]);
   const [filter, setFilter] = useState<Filter>({ sort: "title", query: "" });
+  const [modal, setModal] = useState<boolean>(false);
 
   const sortedPosts = useMemo(() => {
     if (filter.sort) {
@@ -49,6 +52,7 @@ function App() {
 
   const createPost = (newPost: Post) => {
     setPosts([...posts, newPost]);
+    setModal(false);
   };
 
   const removePost = (post: Post) => {
@@ -57,7 +61,12 @@ function App() {
 
   return (
     <div className="App">
-      <PostForm create={createPost} />
+      <Button style={{ marginTop: "15px" }} onClick={() => setModal(true)}>
+        Create new post
+      </Button>
+      <Modal visible={modal} setVisible={setModal}>
+        <PostForm create={createPost} />
+      </Modal>
       <hr style={{ margin: "15px 0" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
       <PostList
