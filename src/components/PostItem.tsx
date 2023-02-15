@@ -13,7 +13,7 @@ const PostItem = ({ post, postNumber, remove }: PostItemProps) => {
       <div className="post">
         <div className="post__content">
           <strong>
-            {postNumber} .{post.title}
+            {postNumber}. {post.title}
           </strong>
           <div className="post__content">{post.body}</div>
         </div>

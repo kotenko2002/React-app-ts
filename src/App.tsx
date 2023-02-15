@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import PostList from "./components/PostList";
 import "./styles/App.css";
 import { Post } from "./entities/types";
@@ -24,7 +24,24 @@ function App() {
       body: "ipsum dolor, sit amet consectetur adipisicing elit. Vel veritatis fuga et, facilis incidunt aspernatur quae optio exercitationem ipsa",
     },
   ]);
-  const [selectedSort, setSelectedSort] = useState("");
+  const [selectedSort, setSelectedSort] = useState<"" | "body" | "title">("");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const sortedPosts = useMemo(() => {
+    if (selectedSort) {
+      return [...posts].sort((a, b) =>
+        a[selectedSort].localeCompare(b[selectedSort])
+      );
+    }
+
+    return posts;
+  }, [selectedSort, posts]);
+
+  const sortedAndSearchedPosts = useMemo(() => {
+    return sortedPosts.filter((post) =>
+      post.title.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase())
+    );
+  }, [searchQuery, sortedPosts]);
 
   const createPost = (newPost: Post) => {
     setPosts([...posts, newPost]);
@@ -37,7 +54,6 @@ function App() {
   const sortPosts = (sort: string) => {
     if (sort === "body" || sort === "title") {
       setSelectedSort(sort);
-      setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort])));
     }
   };
 
@@ -46,6 +62,11 @@ function App() {
       <PostForm create={createPost} />
       <hr style={{ margin: "15px 0" }} />
       <div>
+        <Input
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search..."
+        />
         <Select
           value={selectedSort}
           onChange={(sort) => sortPosts(sort)}
@@ -56,8 +77,12 @@ function App() {
           ]}
         />
       </div>
-      {posts.length !== 0 ? (
-        <PostList remove={removePost} title="List of posts" posts={posts} />
+      {sortedAndSearchedPosts.length !== 0 ? (
+        <PostList
+          remove={removePost}
+          title="List of posts"
+          posts={sortedAndSearchedPosts}
+        />
       ) : (
         <h1 style={{ textAlign: "center" }}>No posts</h1>
       )}
