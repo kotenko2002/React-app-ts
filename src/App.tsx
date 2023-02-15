@@ -5,6 +5,12 @@ import { Post } from "./entities/types";
 import PostForm from "./components/PostForm";
 import Select from "./components/UI/select/Select";
 import Input from "./components/UI/input/Input";
+import PostFilter from "./components/PostFilter";
+
+interface Filter {
+  sort: "body" | "title";
+  query: string;
+}
 
 function App() {
   const [posts, setPosts] = useState<Post[]>([
@@ -24,24 +30,25 @@ function App() {
       body: "ipsum dolor, sit amet consectetur adipisicing elit. Vel veritatis fuga et, facilis incidunt aspernatur quae optio exercitationem ipsa",
     },
   ]);
-  const [selectedSort, setSelectedSort] = useState<"" | "body" | "title">("");
-  const [searchQuery, setSearchQuery] = useState("");
+  //const [selectedSort, setSelectedSort] = useState<"" | "body" | "title">("");
+  // const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState<Filter>({ sort: "title", query: "" });
 
   const sortedPosts = useMemo(() => {
-    if (selectedSort) {
+    if (filter.sort) {
       return [...posts].sort((a, b) =>
-        a[selectedSort].localeCompare(b[selectedSort])
+        a[filter.sort].localeCompare(b[filter.sort])
       );
     }
 
     return posts;
-  }, [selectedSort, posts]);
+  }, [filter.sort, posts]);
 
   const sortedAndSearchedPosts = useMemo(() => {
     return sortedPosts.filter((post) =>
-      post.title.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase())
+      post.title.toLocaleLowerCase().includes(filter.query.toLocaleLowerCase())
     );
-  }, [searchQuery, sortedPosts]);
+  }, [filter.query, sortedPosts]);
 
   const createPost = (newPost: Post) => {
     setPosts([...posts, newPost]);
@@ -51,32 +58,17 @@ function App() {
     setPosts(posts.filter((p) => p.id !== post.id));
   };
 
-  const sortPosts = (sort: string) => {
-    if (sort === "body" || sort === "title") {
-      setSelectedSort(sort);
-    }
-  };
+  // const sortPosts = (sort: string) => {
+  //   if (sort === "body" || sort === "title") {
+  //     setSelectedSort(sort);
+  //   }
+  // };
 
   return (
     <div className="App">
       <PostForm create={createPost} />
       <hr style={{ margin: "15px 0" }} />
-      <div>
-        <Input
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search..."
-        />
-        <Select
-          value={selectedSort}
-          onChange={(sort) => sortPosts(sort)}
-          defaultValue="Sort"
-          options={[
-            { name: "By title", value: "title" },
-            { name: "By body", value: "body" },
-          ]}
-        />
-      </div>
+      <PostFilter filter={filter} setFilter={setFilter} />
       {sortedAndSearchedPosts.length !== 0 ? (
         <PostList
           remove={removePost}

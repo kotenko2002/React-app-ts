@@ -17,6 +17,7 @@ const PostForm = ({ create }: PostFormProps) => {
     create(newPost);
     setPost({ title: "", body: "" });
   };
+
   return (
     <form action="">
       <Input
