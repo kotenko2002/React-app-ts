@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import PostList from "./components/PostList";
 import "./styles/App.css";
 import { Post } from "./models/Post";
@@ -7,6 +7,7 @@ import PostFilter from "./components/PostFilter";
 import { SortOption } from "./types/types";
 import Modal from "./components/UI/modal/Modal";
 import Button from "./components/UI/button/Button";
+import { usePosts } from "./hooks/usePosts";
 
 interface Filter {
   sort: SortOption;
@@ -33,22 +34,7 @@ function App() {
   ]);
   const [filter, setFilter] = useState<Filter>({ sort: "title", query: "" });
   const [modal, setModal] = useState<boolean>(false);
-
-  const sortedPosts = useMemo(() => {
-    if (filter.sort) {
-      return [...posts].sort((a, b) =>
-        a[filter.sort].localeCompare(b[filter.sort])
-      );
-    }
-
-    return posts;
-  }, [filter.sort, posts]);
-
-  const sortedAndSearchedPosts = useMemo(() => {
-    return sortedPosts.filter((post) =>
-      post.title.toLocaleLowerCase().includes(filter.query.toLocaleLowerCase())
-    );
-  }, [filter.query, sortedPosts]);
+  const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
   const createPost = (newPost: Post) => {
     setPosts([...posts, newPost]);
