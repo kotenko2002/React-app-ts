@@ -1,14 +1,13 @@
 import { useMemo, useState } from "react";
 import PostList from "./components/PostList";
 import "./styles/App.css";
-import { Post } from "./entities/types";
+import { Post } from "./models/Post";
 import PostForm from "./components/PostForm";
-import Select from "./components/UI/select/Select";
-import Input from "./components/UI/input/Input";
 import PostFilter from "./components/PostFilter";
+import { SortOption } from "./types/types";
 
 interface Filter {
-  sort: "body" | "title";
+  sort: SortOption;
   query: string;
 }
 
@@ -30,8 +29,6 @@ function App() {
       body: "ipsum dolor, sit amet consectetur adipisicing elit. Vel veritatis fuga et, facilis incidunt aspernatur quae optio exercitationem ipsa",
     },
   ]);
-  //const [selectedSort, setSelectedSort] = useState<"" | "body" | "title">("");
-  // const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState<Filter>({ sort: "title", query: "" });
 
   const sortedPosts = useMemo(() => {
@@ -58,26 +55,16 @@ function App() {
     setPosts(posts.filter((p) => p.id !== post.id));
   };
 
-  // const sortPosts = (sort: string) => {
-  //   if (sort === "body" || sort === "title") {
-  //     setSelectedSort(sort);
-  //   }
-  // };
-
   return (
     <div className="App">
       <PostForm create={createPost} />
       <hr style={{ margin: "15px 0" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
-      {sortedAndSearchedPosts.length !== 0 ? (
-        <PostList
-          remove={removePost}
-          title="List of posts"
-          posts={sortedAndSearchedPosts}
-        />
-      ) : (
-        <h1 style={{ textAlign: "center" }}>No posts</h1>
-      )}
+      <PostList
+        remove={removePost}
+        title="List of posts"
+        posts={sortedAndSearchedPosts}
+      />
     </div>
   );
 }

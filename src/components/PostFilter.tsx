@@ -1,12 +1,13 @@
+import { SortOption } from "../types/types";
 import Input from "./UI/input/Input";
 import Select from "./UI/select/Select";
 
 interface PostFilterProps {
   filter: {
-    sort: "body" | "title";
+    sort: SortOption;
     query: string;
   };
-  setFilter(filter: { sort: "body" | "title"; query: string }): void;
+  setFilter(filter: { sort: SortOption; query: string }): void;
 }
 
 const PostFilter = ({ filter, setFilter }: PostFilterProps) => {

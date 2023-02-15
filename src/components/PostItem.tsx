@@ -1,4 +1,4 @@
-import { Post } from "../entities/types";
+import { Post } from "../models/Post";
 import Button from "./UI/button/Button";
 
 interface PostItemProps {

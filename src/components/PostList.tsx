@@ -1,4 +1,4 @@
-import { Post } from "../entities/types";
+import { Post } from "../models/Post";
 import PostItem from "./PostItem";
 
 interface PostListProps {
@@ -8,6 +8,10 @@ interface PostListProps {
 }
 
 const PostList = ({ title, posts, remove }: PostListProps) => {
+  if (!posts.length) {
+    return <h1 style={{ textAlign: "center" }}>No posts</h1>;
+  }
+
   return (
     <div>
       <h2 style={{ textAlign: "center" }}>{title}</h2>
