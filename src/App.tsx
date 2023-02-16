@@ -10,6 +10,7 @@ import Button from "./components/UI/button/Button";
 import { usePosts } from "./hooks/usePosts";
 import PostService from "./api/PostService";
 import Loader from "./components/UI/loader/Loader";
+import { useFetching } from "./hooks/useFetching";
 
 interface Filter {
   sort: SortOption;
@@ -19,22 +20,16 @@ interface Filter {
 function App() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [filter, setFilter] = useState<Filter>({ sort: "title", query: "" });
-  const [modal, setModal] = useState<boolean>(false);
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
-  const [arePostsLoading, setArePostsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  async function fetchPosts() {
-    setArePostsLoading(true);
-
+  const [modal, setModal] = useState<boolean>(false);
+  const [fetching, isLoading] = useFetching(async () => {
     const posts = await PostService.getAll();
     setPosts(posts);
+  });
 
-    setArePostsLoading(false);
-  }
+  useEffect(() => {
+    fetching();
+  }, []);
 
   const createPost = (newPost: Post) => {
     setPosts([...posts, newPost]);
@@ -55,7 +50,7 @@ function App() {
       </Modal>
       <hr style={{ margin: "15px 0" }} />
       <PostFilter filter={filter} setFilter={setFilter} />
-      {arePostsLoading ? (
+      {isLoading ? (
         <div
           style={{
             display: "flex",

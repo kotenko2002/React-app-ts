@@ -5,9 +5,9 @@ import { SortOption } from "../types/types";
 const useSortedPosts = (posts: Post[], sort: SortOption) => {
     const sortedPosts = useMemo(() => {
         if (sort) {
-        return [...posts].sort((a, b) =>
-            a[sort].localeCompare(b[sort])
-        );
+            return [...posts].sort((a, b) =>
+                a[sort].localeCompare(b[sort])
+            );
         }
 
         return posts;
